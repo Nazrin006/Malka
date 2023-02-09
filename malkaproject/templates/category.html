@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+     {% if category %}
+        {{category.description|truncatewords:160 }}
+     {% else %}
+        Welcome to Malka stores where you can buy special items.....
+     {% endif %}
+{% endblock %}
+{% block title %}
+{% if category %}
+        {{category.name }} - Malka Store
+     {% else %}
+        See our New Collections - Malka Store
+     {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+    <div>
+        <div class="row my_row_class">
+            <div class="mx-auto">
+            <p><a href="{% url 'malkaapp:allProdCat' %}">Our Product Collections</a></p>
+        </div>
+            </div>
+    </div>
+    {% endif %}
+<div class="mx_auto">
+    {% if category %}
+       <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+    <br>
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+    {% else %}
+<div>
+    <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="our products">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">Our Products Collections</h1>
+    <p class="text-justify">It helps the designer plan where the content will sit. It helps in creating drafts of the content on the pages of the website. It originates from the Latin text but is seen as gibberish.
+    It comes with a powerful admin panel to manage every aspect of your store’s setup and operation. You can create, update, or change product menus and categories. You can configure tax rates and currencies. Additional features of this template include a bottom navigation menu, cart and checkout menu, and the ability for buyers to build profiles and see their purchase histories.
+    </p>
+</div>
+   {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4  xol-lg-4">
+            <div class="card text-center" style="min-width:18rem;">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}"></a>
+            <div class="card-body">
+                <h5>{{product.name}}</h5>
+                <h5>{{product.price}}</h5>
+
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+      <div class="mx-auto">
+          {% if products.paginator.num_pages > 1 %}
+
+          <hr>
+          <div class="text-center">
+              {% for pg in products.paginator.page_range %}
+                 <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+             {% endfor %}
+          </div>
+          {% endif %}
+
+      </div>
+    <br>
+</div>
+{% endblock %}
